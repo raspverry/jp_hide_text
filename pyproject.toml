@@ -7,7 +7,7 @@ name = "japanese-text-anonymizer"
 version = "0.1.0"
 description = "日本語テキストから個人情報などをマスキング・匿名化するためのツール"
 readme = "README.md"
-requires-python = ">=3.8,<3.12"  # SpaCyとの互환性を考慮
+requires-python = ">=3.8,<3.12"  # SpaCyとの互換性を考慮
 license = "MIT"
 authors = [
     { name = "開発者名", email = "your.email@example.com" }
@@ -26,38 +26,44 @@ classifiers = [
     "Topic :: Security :: Cryptography",
 ]
 
+# メインの依存パッケージ
 dependencies = [
-    "spacy~=3.5.0",          # バージョンを固定
-    "fugashi~=1.2.0",
-    "unidic-lite~=1.0.8",    
-    "intervaltree~=3.1.0",
-    "ipadic>=1.0.0",         # 追加: 日本語辞書
-    "unidic>=1.1.0",         # 追加: より良い日本語対応のため
+    "spacy~=3.5.0",          # バージョンを固定して安定性を確保
+    "fugashi~=1.2.0",        # 形態素解析
+    "unidic-lite~=1.0.8",    # 基本的な日本語辞書
+    "intervaltree~=3.1.0",   # 文字列の範囲管理
+    "ipadic>=1.0.0",         # 日本語辞書（IPA辞書）
+    "unidic>=1.1.0",         # UniDic辞書（より高精度な日本語処理用）
 ]
 
+# オプションの依存パッケージ
 [project.optional-dependencies]
+# 開発用ツール
 dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "black>=23.0.0",
-    "isort>=5.12.0",
-    "mypy>=1.0.0",
-    "ruff>=0.1.0",
-    "pip-tools>=7.0.0",      # 追加: 依存関係の管理用
+    "pytest>=7.0.0",         # テスト用フレームワーク
+    "pytest-cov>=4.0.0",     # カバレッジ測定
+    "black>=23.0.0",         # コードフォーマッタ
+    "isort>=5.12.0",         # importの整理
+    "mypy>=1.0.0",          # 型チェック
+    "ruff>=0.1.0",          # 高速な静的解析
+    "pip-tools>=7.0.0",      # 依存関係の管理
 ]
 
+# テスト用ツール
 test = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
-    "pytest-asyncio>=0.21.0",  # 追加: 非同期テスト用
+    "pytest-asyncio>=0.21.0",  # 非同期テスト用
 ]
 
+# ドキュメント生成用
 docs = [
     "sphinx>=7.0.0",
     "sphinx-rtd-theme>=1.3.0",
-    "sphinx-autodoc-typehints>=1.23.0",  # 追加: 型ヒントのドキュメント化
+    "sphinx-autodoc-typehints>=1.23.0",  # 型ヒントのドキュメント化
 ]
 
+# ビルド設定
 [tool.hatch.build]
 packages = ["japanese_text_anonymizer"]
 exclude = [
@@ -69,6 +75,7 @@ exclude = [
 [tool.hatch.metadata]
 allow-direct-references = true
 
+# テスト設定
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q --cov=japanese_text_anonymizer"
@@ -77,12 +84,13 @@ python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
 
+# コードスタイル設定
 [tool.black]
 line-length = 88
 target-version = ['py38']
 include = '\.pyi?$'
 extend-exclude = '''
-# デフォルトの除外パターンに追加
+# 除外するディレクトリ
 (
   | dist
   | build
@@ -97,6 +105,7 @@ line_length = 88
 known_first_party = ["japanese_text_anonymizer"]
 known_third_party = ["spacy", "fugashi"]
 
+# 型チェック設定
 [tool.mypy]
 python_version = "3.8"
 warn_return_any = true
@@ -112,9 +121,10 @@ module = [
 ]
 ignore_missing_imports = true
 
+# コード品質チェック設定
 [tool.ruff]
 select = [
-    "E",  # pycodestyle errors
+    "E",  # pycodestyleエラー
     "F",  # pyflakes
     "B",  # flake8-bugbear
     "I",  # isort
@@ -124,6 +134,7 @@ line-length = 88
 target-version = "py38"
 extend-exclude = ["tests/*"]
 
+# カバレッジ設定
 [tool.coverage.run]
 source = ["japanese_text_anonymizer"]
 omit = [
