@@ -1,0 +1,145 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "japanese-text-anonymizer"
+version = "0.1.0"
+description = "日本語テキストから個人情報などをマスキング・匿名化するためのツール"
+readme = "README.md"
+requires-python = ">=3.8,<3.12"  # SpaCyとの互환性を考慮
+license = "MIT"
+authors = [
+    { name = "開発者名", email = "your.email@example.com" }
+]
+keywords = ["nlp", "自然言語処理", "匿名化", "プライバシー", "テキスト処理"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Natural Language :: Japanese",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Security :: Cryptography",
+]
+
+dependencies = [
+    "spacy~=3.5.0",          # バージョンを固定
+    "fugashi~=1.2.0",
+    "unidic-lite~=1.0.8",    
+    "intervaltree~=3.1.0",
+    "ipadic>=1.0.0",         # 追加: 日本語辞書
+    "unidic>=1.1.0",         # 追加: より良い日本語対応のため
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+    "pip-tools>=7.0.0",      # 追加: 依存関係の管理用
+]
+
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.21.0",  # 追加: 非同期テスト用
+]
+
+docs = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "sphinx-autodoc-typehints>=1.23.0",  # 追加: 型ヒントのドキュメント化
+]
+
+[tool.hatch.build]
+packages = ["japanese_text_anonymizer"]
+exclude = [
+    "tests*",
+    "docs*",
+    "examples*",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=japanese_text_anonymizer"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+# デフォルトの除外パターンに追加
+(
+  | dist
+  | build
+  | docs/build
+)
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["japanese_text_anonymizer"]
+known_third_party = ["spacy", "fugashi"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+plugins = ["numpy.typing.mypy_plugin"]
+
+[[tool.mypy.overrides]]
+module = [
+    "fugashi.*",
+    "intervaltree.*"
+]
+ignore_missing_imports = true
+
+[tool.ruff]
+select = [
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "B",  # flake8-bugbear
+    "I",  # isort
+]
+ignore = ["E501"]
+line-length = 88
+target-version = "py38"
+extend-exclude = ["tests/*"]
+
+[tool.coverage.run]
+source = ["japanese_text_anonymizer"]
+omit = [
+    "tests/*",
+    "setup.py",
+]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",
+    "raise ImportError",
+]
+show_missing = true
